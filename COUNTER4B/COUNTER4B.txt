@@ -2,21 +2,16 @@ Inputs: in[4], load, reset;
 Outputs: out[4];
 
 // 1. specify the components you want to use here
-Parts: loadmux MUX4B, resetmux MUX4B, reg REGISTER4B, add ADDER4B;
+Parts: r REGISTER4B, loadMux MUX4B, resetMux MUX4B,
+  a ADDER4B
+;
 
 // 2. wire them up
-Wires:
-  in -> loadmux.in2,
-  load -> loadmux.sel,
-  add.out -> loadmux.in1,
-
-  loadmux.out -> resetmux.in1,
-  0 -> resetmux.in2,
-  reset -> resetmux.sel,
-
-  resetmux.out -> reg.in,
-  1 -> reg.load,
-  reg.out -> out,
-  reg.out -> add.in1,
-  1 -> add.in2[1]
-  ;
+Wires: 
+  1 -> r.load, // we are always writing
+  load -> loadMux.sel, 1 -> a.in1[1], r.out -> a.in2, a.out -> loadMux.in1, 
+  in -> loadMux.in2, loadMux.out -> resetMux.in1, // if 0: inc, 1: write in
+  reset -> resetMux.sel, resetMux.out -> r.in,  // if reset write 0
+  r.out -> out
+  //a.out -> out
+;
