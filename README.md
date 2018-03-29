@@ -1,6 +1,6 @@
 My solutions to [MHRD](http://store.steampowered.com/app/576030/).
 
-Forked from Alan Shen's [repo](https://github.com/sunzenshen/mhrd-solutions) to save my works. 
+Forked from Alan Shen's [repo](https://github.com/sunzenshen/mhrd-solutions) to save my works. My solutions are **NOT** optimal. 
 
 below is his original readme.
 
