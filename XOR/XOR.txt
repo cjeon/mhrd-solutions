@@ -1,23 +1,12 @@
-```
 Inputs: in1, in2;
 Outputs: out;
 
 // 1. specify the components you want to use here
-Parts:
-  or OR,
-  and AND,
-  nand NAND
-  ;
+Parts: and AND, n1 NOT, a2 AND, or OR;
 
 // 2. wire them up
-Wires:
-  in1 -> or.in1,
-  in2 -> or.in2,
-  in1 -> nand.in1,
-  in2 -> nand.in2,
-  or.out   -> and.in1,
-  nand.out -> and.in2,
-  and.out -> out
-  ;
-
-```
+Wires: 
+  in1 -> or.in1, in2 -> or.in2,
+  in1 -> and.in1, in2->and.in2,
+  and.out->n1.in,
+  or.out -> a2.in1, n1.out -> a2.in2, a2.out -> out;
