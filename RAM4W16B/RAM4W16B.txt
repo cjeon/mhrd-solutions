@@ -9,3 +9,24 @@ Parts: r0 REGISTER16B, r1 REGISTER16B, r2 REGISTER16B, r3 REGISTER16B,
   n2 NOT, a20 AND, a21 AND,
   a30 AND, a31 AND
 ;
+
+// 2. wire them up 1 01 , 10?
+Wires: 
+  // in
+  in -> r0.in, in -> r1.in, in -> r2.in, in -> r3.in,
+  // sel
+  address[2] -> o0.in1, address[1] -> o0.in2, o0.out -> n0.in,
+  n0.out -> a01.in1, load -> a01.in2, a01.out -> r0.load, // r0
+  address[2] -> n1.in, n1.out -> a10.in1, address[1] -> a10.in2, 
+  a10.out -> a11.in1, load -> a11.in2, a11.out -> r1.load, // r1
+  address[2] -> a20.in1, address[1] -> n2.in, n2.out -> a20.in2, 
+  a20.out -> a21.in1, load -> a21.in2, a21.out -> r2.load, // r2
+  address[2] -> a30.in1, address[1] -> a30.in2, a30.out -> a31.in1, 
+  load -> a31.in2, a31.out -> r3.load, // r3
+  // out
+  r0.out -> result.in1, r1.out -> result.in2, r2.out -> result.in3, 
+  r3.out -> result.in4,
+  address -> result.sel,
+  result.out -> out
+  // r2.out -> out      
+;
