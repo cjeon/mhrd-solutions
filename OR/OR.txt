@@ -2,23 +2,27 @@ Inputs: in1, in2;
 Outputs: out;
 
 // 1. specify the components you want to use here
-Parts:
-  and1 AND,
-  and2 AND,
-  not1 NOT,
-  not2 NOT,
-  nand NAND
-  ;
+Parts: n1 NOT, n2 NOT, n3 NOT, and AND;
+// nand -> all true, false
+// 00 t 01 t 10 t 11 f
+// or
+// 00 f 01 t 10 t 11 t
+
+// not a nand
+// 10 t 11 f 00 t 01 t
+
+// and
+// 00 f 01 f 10 f 11 t
+// not a and
+// 10 f 11 t 00 f 01 f
+
+// not a and not b
+// 11 t 10 f 01 f 00 f
+// not above
+// f t t t 
 
 // 2. wire them up
-Wires:
-  in1 -> and1.in1,
-  1   -> and1.in2,
-         and1.out -> not1.in,
-                     not1.out -> nand.in1,
-                                 nand.out -> out,
-                     not2.out -> nand.in2,
-         and2.out -> not2.in,
-  1   -> and2.in2,
-  in2 -> and2.in1
-  ;
+Wires: 
+  in1 -> n1.in, n1.out -> and.in1, 
+  in2 -> n2.in, n2.out -> and.in2,
+  and.out -> n3.in, n3.out -> out;
