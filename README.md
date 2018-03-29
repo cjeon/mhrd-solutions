@@ -1,3 +1,9 @@
+My solutions to [MHRD](http://store.steampowered.com/app/576030/).
+
+Forked from Alan Shen's [repo](https://github.com/sunzenshen/mhrd-solutions) to save my works. 
+
+below is his original readme.
+
 MHRD Solutions
 ==============
 My solutions to the NAND to CPU design game [MHRD](http://store.steampowered.com/app/576030/).
