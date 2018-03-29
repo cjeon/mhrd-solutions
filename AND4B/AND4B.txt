@@ -2,28 +2,18 @@ Inputs: in1[4], in2[4];
 Outputs: out[4];
 
 // 1. specify the components you want to use here
-Parts:
-  and1 AND,
-  and2 AND,
-  and3 AND,
-  and4 AND
-  ;
+Parts: 
+  a1 AND, a2 AND, a3 AND, a4 AND;
 
 // 2. wire them up
-Wires:
-  in1[1] -> and1.in1,
-  in2[1] -> and1.in2,
-            and1.out -> out[1],
-
-  in1[2] -> and2.in1,
-  in2[2] -> and2.in2,
-            and2.out -> out[2],
-
-  in1[3] -> and3.in1,
-  in2[3] -> and3.in2,
-            and3.out -> out[3],
-
-  in1[4] -> and4.in1,
-  in2[4] -> and4.in2,
-            and4.out -> out[4]
-  ;
+Wires: 
+  // in
+  in1[1] -> a1.in1, in2[1] -> a1.in2,
+  in1[2] -> a2.in1, in2[2] -> a2.in2,
+  in1[3] -> a3.in1, in2[3] -> a3.in2,
+  in1[4] -> a4.in1, in2[4] -> a4.in2,
+  // out
+  a1.out -> out[1],
+  a2.out -> out[2],
+  a3.out -> out[3],
+  a4.out -> out[4];
