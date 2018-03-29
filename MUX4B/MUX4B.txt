@@ -2,21 +2,30 @@ Inputs: in1[4], in2[4], sel;
 Outputs: out[4];
 
 // 1. specify the components you want to use here
-Parts:
-  and1 AND4B,
-  and2 AND4B,
-  not NOT4B,
-  or OR4B
-  ;
+Parts: m1 MUX, m2 MUX, m3 MUX, m4 MUX;
 
 // 2. wire them up
-Wires:
-  in1 -> and1.in1,
-  not.out -> and1.in2,
-         and1.out -> or.in1,
-                     or.out -> out,
-         and2.out -> or.in2,
-  in2 -> and2.in1,
-  sel -> and2.in2,
-  sel -> not.in
-  ;
+Wires: 
+  // in1
+  in1[1] -> m1.in1,
+  in1[2] -> m2.in1,
+  in1[3] -> m3.in1,
+  in1[4] -> m4.in1,
+  
+  // in2
+  in2[1] -> m1.in2,
+  in2[2] -> m2.in2,
+  in2[3] -> m3.in2,
+  in2[4] -> m4.in2,
+  
+  // sel
+  sel -> m1.sel,
+  sel -> m2.sel,
+  sel -> m3.sel,
+  sel -> m4.sel,
+  
+  // out
+  m1.out -> out[1],
+  m2.out -> out[2],
+  m3.out -> out[3],
+  m4.out -> out[4];
