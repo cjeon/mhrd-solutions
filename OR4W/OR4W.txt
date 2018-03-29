@@ -2,19 +2,15 @@ Inputs: in[4];
 Outputs: out;
 
 // 1. specify the components you want to use here
-Parts:
-  or1 OR,
-  or2 OR,
-  or3 OR
-  ;
+Parts: o1 OR, o2 OR, o3 OR;
 
 // 2. wire them up
-Wires:
-  in[1] -> or1.in1,
-  in[2] -> or1.in2,
-           or1.out -> or2.in1,
-             in[3] -> or2.in2,
-                      or2.out -> or3.in1,
-                        in[4] -> or3.in2,
-                                 or3.out -> out
-  ;
+Wires: 
+  // in
+  in[1] -> o1.in1, in[2] -> o1.in2,
+  in[3] -> o2.in1, in[4] -> o2.in2,
+  // merge
+  o1.out -> o3.in1, o2.out -> o3.in2,
+  // out
+  o3.out -> out 
+;
