@@ -1,39 +1,33 @@
 Inputs: in1[4], in2[4], opCode[4];
 Outputs: out[4], negative, zero;
+// 1 : negate 1
+// 2 : negate 2
+// 3 : 0:add, 1:nand
+// 4 : negate out
+Parts: 
+  n1 NOT4B, result1 MUX4B,
+  n2 NOT4B, result2 MUX4B,
+  a ADDER4B, n NAND4B, result3 MUX4B,
+  n4 NOT4B, result4 MUX4B,
+  
+  o OR4W, zn NOT 
+;
 
-Parts: not1 NOT4B, not2 NOT4B, notout NOT4B,
-       mux1 MUX4B, mux2 MUX4B, muxout MUX4B, muxop MUX4B,
-       add ADDER4B, nand NAND4B, or OR4W, and AND, notzero NOT;
-
+// 2. wire them up
 Wires:
-  // wire opcodes to mux branches
-  opCode[4] -> mux1.sel , opCode[3] -> mux2.sel,
-  opCode[2] -> muxop.sel, opCode[1] -> muxout.sel,
+// opCode Binding  
+  opCode[4] -> result1.sel, opCode[3] -> result2.sel, 
+  opCode[2] -> result3.sel, opCode[1] -> result4.sel,
 
-  // negate in1?
-  in1 -> not1.in, not1.out -> mux1.in2, in1 -> mux1.in1,
-  // negate in2?
-  in2 -> not2.in, not2.out -> mux2.in2, in2 -> mux2.in1,
+// compute
+  in1 -> result1.in1, in1 -> n1.in, n1.out -> result1.in2,
+  in2 -> result2.in1, in2 -> n2.in, n2.out -> result2.in2,
+  result1.out -> a.in1, result2.out -> a.in2, a.out -> result3.in1,
+  result1.out -> n.in1, result2.out -> n.in2, n.out -> result3.in2,
+  result3.out -> result4.in1, result3.out -> n4.in, n4.out -> result4.in2,
 
-  0 -> add.carryIn,
-  // add or nand 1 & 2?
-  // ------------------
-  // sel=0  add 1 & 2
-  mux1.out -> add.in1, mux2.out -> add.in2,
-  // sel=1 nand 1 & 2
-  mux1.out -> nand.in1, mux2.out -> nand.in2,
-  add.out -> muxop.in1, nand.out -> muxop.in2,
-
-  // bitwise negate out?
-  muxop.out -> notout.in, notout.out -> muxout.in2,
-  muxop.out -> muxout.in1,
-
-  // output
-  muxout.out -> out,
-
-  // is output zero?
-  muxout.out -> or.in, or.out -> notzero.in, notzero.out -> zero,
-
-  // is output negative?
-  muxout.out[4] -> and.in1, 1 -> and.in2, and.out -> negative
-  ;
+// write
+  result4.out -> out,
+  result4.out[4] -> negative,
+  result4.out -> o.in, o.out -> zn.in, zn.out -> zero  
+;
