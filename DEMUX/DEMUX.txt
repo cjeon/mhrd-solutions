@@ -1,20 +1,25 @@
-Inputs: in, sel;
+nputs: in, sel;
 Outputs: out1, out2;
 
+// if sel is 0 write in to out1
+// if sel is 1 write in to out2
+
+// =>
+// write NOT SEL AND in to out1
+// write SEL AND in to out2 
+
 // 1. specify the components you want to use here
-Parts:
-  and1 AND,
-  and2 AND,
-  not  NOT
-  ;
+Parts: n NOT, a1 AND, a2 AND;
 
 // 2. wire them up
-Wires:
-  sel -> not.in,
-  not.out -> and1.in2,
-  in -> and1.in1,
-  and1.out -> out1,
-  in -> and2.in1,
-  sel -> and2.in2,
-  and2.out -> out2
-  ;
+Wires: 
+  // out1
+  sel -> n.in, n.out -> a1.in1,
+  in -> a1.in2,
+  a1.out -> out1,
+  
+  // out 2
+  sel -> a2.in1,
+  in -> a2.in2,
+  a2.out -> out2  
+;
