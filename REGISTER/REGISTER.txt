@@ -2,16 +2,12 @@ Inputs: in, load;
 Outputs: out;
 
 // 1. specify the components you want to use here
-Parts:
-  mux MUX,
-  dff DFF
-  ;
-
+Parts: a AND, m MUX, d DFF;
+// load = 1, in -> d
+// load = 0, d -> d
 // 2. wire them up
-Wires:
-  in -> mux.in2,
-  load -> mux.sel,
-  mux.out -> dff.in,
-  dff.out -> out,
-  dff.out -> mux.in1
-  ;
+Wires: 
+  in -> m.in2, d.out -> m.in1,
+  load -> m.sel,
+  m.out -> d.in, d.out -> out     
+;
