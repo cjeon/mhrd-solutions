@@ -1,38 +1,36 @@
-Inputs: in, sel[2];
+Inputs: in, sel[2];
 Outputs: out1, out2, out3, out4;
 
+//  0 -> out1, 1 -> out2, 2 -> out3, 3 -> out4
+
+// =>
+// out1 == not (sel1 AND sel2) AND in
+// out2 == not s1 and s2 and in
+// out3 == s1 and not s2 and in
+// out4 == s1 and s2 and in
+
 // 1. specify the components you want to use here
-Parts:
-  not1 NOT,
-  not2 NOT,
-  and1a AND,
-  and1b AND,
-  and2a AND,
-  and2b AND,
-  and3a AND,
-  and3b AND,
-  and4a AND,
-  and4b AND
-  ;
-
+Parts: 
+  n0 NOT, a0 OR, a1 AND,
+  n1 NOT, a2 AND, a3 AND,
+  a4 AND, n2 NOT, a5 AND,
+  a6 AND, a7 AND;
 // 2. wire them up
-Wires:
-  and1a.out -> out1,  and2a.out -> out2,  and3a.out -> out3,  and4a.out -> out4,
-  in -> and1a.in1,  in -> and2a.in1,  in -> and3a.in1,  in -> and4a.in1,
-  sel[1] -> not1.in,  sel[2] -> not2.in,
-  
-  and1b.out -> and1a.in2,  and2b.out -> and2a.in2,
-  and3b.out -> and3a.in2,  and4b.out -> and4a.in2,
-
-  not1.out -> and1b.in1,
-  not2.out -> and1b.in2,
-
-  sel[1] -> and2b.in1,
-  not2.out -> and2b.in2,
-
-  not1.out -> and3b.in1,
-  sel[2] -> and3b.in2,
-
-  sel[1] -> and4b.in1,
-  sel[2] -> and4b.in2
-  ;
+Wires: 
+  // out1
+  sel[1] -> a0.in1, sel[2] -> a0.in2, a0.out -> n0.in,
+  n0.out -> a1.in1, in -> a1.in2, a1.out -> out1,
+  // out2 1, 01, out = 0 ??
+  sel[1] -> n1.in, n1.out -> a2.in1,
+  sel[2] -> a2.in2,
+  a2.out -> a3.in1, in -> a3.in2,
+  a3.out -> out3,
+  // out3
+  sel[1] -> a4.in1,
+  sel[2] -> n2.in, n2.out -> a4.in2,
+  a4.out -> a5.in1, in -> a5.in2,
+  a5.out -> out2,
+  // out4
+  sel[1] -> a6.in1, sel[2] -> a6.in2,
+  a6.out -> a7.in1, in -> a7.in2,
+  a7.out -> out4;
