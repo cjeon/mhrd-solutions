@@ -1,33 +1,31 @@
 Inputs: instr[16], data[16], reset;
 Outputs: write, dataAddr[16], instrAddr[16], result[16];
 
+
+// 1. more devices are needed to implement behavior as described in specification
 Parts:
-  decoder DECODER, mReg REGISTER16B, aReg REGISTER16B, pc COUNTER16B, alu ALU16B,
-  jmpIfZAndZero AND, op2Mux MUX4W16B, op1Mux MUX16B, loadMmux MUX16B
-;
+  d DECODER, mr REGISTER16B, ar REGISTER16B, pc COUNTER16B, alu ALU16B,
+  aluMux1 MUX16B, aluMux2 MUX4W16B, pcLoadAnd AND, mrMux MUX16B;
 
-Wires:
-  instr->decoder.instr,
-  reset->pc.reset,
-  pc.out->instrAddr,
-  decoder.loadD->write,
-  decoder.opCode->alu.opCode,
-  mReg.out->dataAddr,
-  alu.out->result,
-
-  alu.zero ->jmpIfZAndZero.in1, decoder.jmpIfZ->jmpIfZAndZero.in2,
-  jmpIfZAndZero.out->pc.load, mReg.out->pc.in,
-
-  decoder.op1->op1Mux.sel, op1Mux.out->alu.in1,
-  decoder.constant[1:5]->op1Mux.in2[1:5], aReg.out->op1Mux.in1,
-
-  decoder.op2->op2Mux.sel, op2Mux.out->alu.in2,
-  decoder.constant[1:5]->op2Mux.in1[1:5], aReg.out->op2Mux.in2,
-  mReg.out->op2Mux.in3, data->op2Mux.in4,
-
-  decoder.loadM->mReg.load, decoder.cToM->loadMmux.sel, loadMmux.out->mReg.in,
-  alu.out->loadMmux.in1, decoder.constant->loadMmux.in2[1:15],
-
-  decoder.loadA->aReg.load, alu.out->aReg.in
-
+// 2. wire them up
+Wires: 
+  instr -> d.instr, // decode instructions
+  // alu
+  ar.out -> aluMux1.in1, d.constant[1:5] -> aluMux1.in2[1:5], 
+  d.op1 -> aluMux1.sel, aluMux1.out -> alu.in1, // alu in 1
+  d.constant[1:5] -> aluMux2.in1[1:5],
+  ar.out -> aluMux2.in2, mr.out -> aluMux2.in3, data -> aluMux2.in4,
+  d.op2 -> aluMux2.sel, aluMux2.out -> alu.in2, // alu in 2
+  d.opCode -> alu.opCode, alu.out -> result,
+  // AR
+  alu.out -> ar.in, d.loadA -> ar.load,
+  // MR
+  alu.out -> mrMux.in1, d.constant -> mrMux.in2[1:15], 
+  d.cToM -> mrMux.sel, mrMux.out -> mr.in,
+  d.loadM -> mr.load, mr.out -> dataAddr,
+  // PC
+  mr.out -> pc.in, reset -> pc.reset, alu.zero -> pcLoadAnd.in1, 
+  d.jmpIfZ -> pcLoadAnd.in2, pcLoadAnd.out -> pc.load, pc.out -> instrAddr,
+  // loadD
+  d.loadD -> write
 ;
