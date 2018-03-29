@@ -2,13 +2,7 @@ Inputs: in;
 Outputs: out;
 
 // 1. specify the components you want to use here
-Parts: myNAND NAND;
+Parts: nand NAND;
 
 // 2. wire them up
-Wires:
-  in -> myNAND.in1,
-  in -> myNAND.in2,
-  myNAND.out -> out
-;
-
-
+Wires: in -> nand.in1, 1 -> nand.in2, nand.out -> out;
