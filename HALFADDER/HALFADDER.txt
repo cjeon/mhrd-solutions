@@ -1,18 +1,17 @@
 Inputs: in1, in2;
 Outputs: out, carry;
 
+// ones - xor
+// carry - and
+
 // 1. specify the components you want to use here
-Parts:
-  xor XOR,
-  and AND
-  ;
+Parts: x XOR, a AND;
 
 // 2. wire them up
-Wires:
-  in1 -> xor.in1,
-  in2 -> xor.in2,
-         xor.out -> out,
-  in1 -> and.in1,
-  in2 -> and.in2,
-         and.out -> carry
-  ;
+Wires: 
+  in1 -> x.in1, in2 -> x.in2,
+  x.out -> out,
+  
+  in1 -> a.in1, in2 -> a.in2,
+  a.out -> carry;
+
